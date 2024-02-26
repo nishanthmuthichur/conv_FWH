@@ -19,16 +19,31 @@ import conv_FWH_io as io
 
 def main(ip):
     
-    fsurf = io.read_FWH_grid_test(ip)
+    cfwh_c = cfwhl.cfwh_cls()
     
-    fsurf = cfwhl.comp_surf_metrics(fsurf)
+    cfwh_c.a_inf = ip.a_inf
+    cfwh_c.freq  = ip.freq
+    cfwh_c.omega = ip.omega
+    cfwh_c.k_inf = ip.k_inf
+    
+    cfwh_c.X_pos = ip.X_pos
+    
+    cfwh_c.U_1   = ip.U_1
+    cfwh_c.M_1   = cfwh_c.U_1 / cfwh_c.a_inf
+    cfwh_c.beta  = np.sqrt(1 - (cfwh_c.M_1**2))
+
+
+    
+    cfwh_c.fsurf = io.read_FWH_grid_test(ip)
+    
+    cfwh_c.fsurf = cfwhl.comp_surf_metrics(cfwh_c.fsurf)
     
     #fsurf = cfwhl.comp_test_func(fsurf)
-    fsurf = cfwhl.read_cfwh_sources(fsurf)
+    #fsurf = cfwhl.read_cfwh_sources(fsurf)
     
-    fsurf = cfwhl.comp_cfwh_integrand(fsurf)
+    #fsurf = cfwhl.comp_cfwh_integrand(fsurf)
    
-    fsurf = cfwhl.comp_cfwh_far_field_pres(fsurf)
+    #fsurf = cfwhl.comp_cfwh_far_field_pres(fsurf)
     
     #print(f'conv_FWH: Numerical surface integral = {fsurf[0].test_ninteg}')
     #print(f'conv_FWH: Analytical surface integral = {fsurf[0].test_ainteg}')    

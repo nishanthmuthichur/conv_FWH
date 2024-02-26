@@ -4,6 +4,32 @@ PI = np.pi
 
 DUMMY = -100000
 
+class cfwh_cls():
+    
+    def __init__(self):
+        
+        self.a_inf = DUMMY
+        self.freq  = DUMMY
+        self.omega = DUMMY
+        self.k_inf = DUMMY
+
+        self.gamma = 1.4
+        self.R_air = 287
+
+        self.X_pos = DUMMY
+
+        self.U_1   = DUMMY
+        self.U_2   = DUMMY
+        self.U_3   = DUMMY
+
+        self.M_1   = DUMMY
+        self.beta  = DUMMY
+
+        self.fsurf = DUMMY
+
+
+
+
 class surf():
     
     def __init__(self):
@@ -23,18 +49,19 @@ class surf():
         self.metric_yN = DUMMY
         self.metric_zN = DUMMY
 
+        self.n1 = DUMMY
+        self.n2 = DUMMY
+        self.n3 = DUMMY
+
         self.J = DUMMY
-    
+
         self.Q = DUMMY
         
         self.F_1 = DUMMY
         self.F_2 = DUMMY
         self.F_3 = DUMMY
 
-        self.U_1 = DUMMY
-        self.U_2 = DUMMY
-        self.U_3 = DUMMY
-    
+
         self.test_func  = DUMMY
         self.test_ninteg = DUMMY
         self.test_ainteg = DUMMY
@@ -207,8 +234,73 @@ def read_cfwh_sources(fsurf):
     return fsurf
 
 
-def comp_cfwh_integrand(fsurf):
+def comp_cfwh_integrand(cfwh_c):
+
+    fsurf = cfwh_c.fsurf
     
+    a_inf = cfwh_c.a_inf
+    k_inf = cfwh_c.k_inf
+    U_1   = cfwh_c.U_1
+    M_1   = cfwh_c.M_1
+    omega = cfwh_c.omega
+
+    beta  = cfwh_c.beta
+
+    X_pos = cfwh_c.X_pos
+
+
+    
+    N_surf = len(fsurf)
+    
+    for surf_idx in range(0, N_surf):
+        
+        X_pos = fsurf[surf_idx].X_pos
+        
+        x_coord = fsurf[surf_idx].x_coord
+        y_coord = fsurf[surf_idx].y_coord
+        z_coord = fsurf[surf_idx].z_coord        
+        
+        X = (x_coord - X_pos[0])
+        Y = (y_coord - X_pos[1])
+        Z = (z_coord - X_pos[2])        
+        
+        Q = fsurf.Q
+        
+        F1 = fsurf.F1
+        F2 = fsurf.F2
+        F3 = fsurf.F3
+        
+        R_star = np.sqrt(X**2 + beta * (Y**2 + Z**2))
+
+        R = (-M_1 * X + R_star) / (beta * beta)
+            
+        G = np.exp(-1j * k_inf * R) / (4 * PI *R)
+        
+        DG1 = (np.exp(-1j * k_inf * R) / (4 * PI * R_star))  *       \
+                  (                                                  \
+                      (1j * k_inf * R_star * (M_1 * R_star - X)) +   \
+                      (beta**2 * X)                                  \
+                  )    / (beta**4 * R_star**2) 
+                      
+        DG2 = (np.exp(-1j * k_inf * R) / (4 * PI * R_star))  * \
+                  (                                            \
+                      (1j * k_inf * R_star * beta * Y)       + \
+                      (beta**2 * Y)                            \
+                  )    / (beta**2 * R_star**2)                  
+                      
+        DG3 = (np.exp(-1j * k_inf * R) / (4 * PI * R_star))  * \
+                  (                                            \
+                      (1j * k_inf * R_star * beta * Z)       + \
+                      (beta**2 * Z)                            \
+                  )    / (beta**2 * R_star**2)                                        
+                      
+        intrnd_Q = (1j * omega * G + DG1) * Q
+        
+        
+                         
+               
+                   
+            
     return fsurf
 
 
