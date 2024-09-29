@@ -17,24 +17,12 @@ import conv_FWH_io as io
 # 4. Compute the integrand
 # 5. Compute the far-field pressure
 
-def main(ip):
+def CFWH_main(cfwh_c):
     
-    cfwh_c = cfwhl.cfwh_cls()
-    
-    cfwh_c.a_inf = ip.a_inf
-    cfwh_c.freq  = ip.freq
-    cfwh_c.omega = ip.omega
-    cfwh_c.k_inf = ip.k_inf
-    
-    cfwh_c.X_pos = ip.X_pos
-    
-    cfwh_c.U_1   = ip.U_1
-    cfwh_c.M_1   = cfwh_c.U_1 / cfwh_c.a_inf
+    cfwh_c.M_1   = (cfwh_c.U_1 / cfwh_c.a_inf)
     cfwh_c.beta  = np.sqrt(1 - (cfwh_c.M_1**2))
 
-
-    
-    cfwh_c.fsurf = io.read_FWH_grid_test(ip)
+    cfwh_c.fsurf = io.read_FWH_grid_test(cfwh_c)
     
     cfwh_c.fsurf = cfwhl.comp_surf_metrics(cfwh_c.fsurf)
     

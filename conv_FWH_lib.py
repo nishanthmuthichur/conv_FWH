@@ -9,9 +9,9 @@ class cfwh_cls():
     def __init__(self):
         
         self.a_inf = DUMMY
-        self.freq  = DUMMY
-        self.omega = DUMMY
-        self.k_inf = DUMMY
+        self.freq_vec  = DUMMY
+        self.omega_vec = DUMMY
+        self.k_inf_vec = DUMMY
 
         self.gamma = 1.4
         self.R_air = 287
@@ -34,12 +34,14 @@ class surf():
     
     def __init__(self):
      
+        self.name = DUMMY   
+     
         self.N_xi  = DUMMY
         self.N_eta = DUMMY        
      
-        self.x_coord = DUMMY
-        self.y_coord = DUMMY
-        self.z_coord = DUMMY
+        self.x_co = DUMMY
+        self.y_co = DUMMY
+        self.z_co = DUMMY
    
         self.metric_xE = DUMMY
         self.metric_yE = DUMMY
@@ -52,6 +54,12 @@ class surf():
         self.n1 = DUMMY
         self.n2 = DUMMY
         self.n3 = DUMMY
+
+        self.rho   = DUMMY
+        self.u_vel = DUMMY
+        self.v_vel = DUMMY
+        self.w_vel = DUMMY
+        self.ps = DUMMY        
 
         self.J = DUMMY
 
